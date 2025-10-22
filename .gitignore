@@ -1,0 +1,8 @@
+# Godot 4
+.godot/
+.import/
+# OS/editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
