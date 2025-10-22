@@ -1,0 +1,373 @@
+# Valley of Bitumen — Game Design Document (Godot 4)
+
+*Working title:* **Valley of Bitumen**
+*Genre:* Tactical Strategy / Roguelite (Turn-based, procedural)
+*Core Fantasy:* Lead Abraham’s 318 trained servants in a tense night raid through the Valley of Siddim to rescue Lot. Every incursion is a new layout of camps, guards, and kings’ armies.
+*Pitch in a sentence:* *Into the Breach* planning clarity meets *Hades* momentum and consequence, wrapped in minimalist, stylized isometric stealth-tactics.
+
+---
+
+## 1) Design Pillars
+
+1. **Stealth with Conviction** — Planning and patience matter. Ambushes, diversions, and moral restraint can be stronger than brute force.
+2. **Consequences, not meters** — Choices (spare/slay, free/ignore captives) ripple through faith, morale, and the map’s alert state.
+3. **Procedural Clarity** — Fresh maps each run, yet always readable: clear tiles, light vs. shadow, deterministic odds.
+4. **Tense Minimalism** — Compact maps, concise turns, bold silhouettes, sparse audio. Every click should feel consequential.
+
+---
+
+## 2) Target Platform & Audience
+
+* **Platform:** PC/Mac/Linux (mouse/keyboard), Steam Deck; console ports feasible after PC.
+* **Session Length:** 20–45 min runs.
+* **Audience:** Fans of turn tactics, roguelites, biblical/ancient settings, stealth strategy.
+
+---
+
+## 3) Inspirations & Differentiators
+
+* **Inspirations:** *Into the Breach*, *Invisible, Inc.*, *Hades*, *Door Kickers*, *Crown Trick*.
+* **Differentiators:** Moral decisions directly tie to the **Dynamic Faith System**; light/darkness stealth in an open desert; historical-biblical heist tone; hazards like **bitumen pits**.
+
+---
+
+## 4) High-Level Gameplay Overview
+
+* **Mode:** Single-player, turn-based. Isometric 2D.
+* **Squad:** Draft a **strike team (4–6)** from Abraham’s 318 to infiltrate a procedurally generated valley at night.
+* **Objective:** Locate and extract **Lot** (and optional captives/resources) before **dawn** or full **alarm**.
+* **Playstyles:** Frontal assault, sabotage, stealth rescues, or hybrid.
+
+---
+
+## 5) Core Loop
+
+1. **Prepare:** Choose squad, blessings, starting supplies, and a seed.
+2. **Scout:** Use high ground / shadows to reveal camps, sentries, patrols, and Lot’s probable location.
+3. **Plan:** Queue orders, set ambushes, decide where to spend **Faith** vs. conserve it.
+4. **Execute (Turns):** Move, hide, distract, rescue, sabotage, strike, and extract.
+5. **Resolve:** Handle moral choices (spare/slay, free captives), distribute spoils, adjust **Faith/Resolve**.
+6. **Meta:** Unlock oaths, traits, and miracles for the next run.
+
+**Run Win:** Extract Lot and your team.
+**Run Fail:** Commander captured/killed, Faith collapses (Hubris), or dawn/alarm overwhelms.
+
+---
+
+## 6) Systems
+
+### 6.1 Turn Structure & Actions
+
+* **Initiative:** Player phase → Enemy phase → Environmental effects (fires, alarms) → Dawn clock.
+* **Action Points (AP):** Each unit has **2 AP**. Typical costs: Move (1), Attack (1–2), Interact (1), Hide (1), Sabotage (2), Rescue (2), Wait (0, ends turn).
+* **Facing & Flanking:** Back attacks gain crit chance, reduce noise.
+* **Elevation:** Dunes/ledges grant vision range and crit bonuses.
+* **Noise:** Each action generates noise pips; exceeding a tile’s noise threshold triggers suspicion/alert checks.
+
+### 6.2 Stealth & Detection
+
+* **Light Levels:** *Dark*, *Dim*, *Lit*. Player-placed shadows matter (extinguish torches, call winds).
+* **Vision Cones:** Tile-based LOS; blocked by tents, wagons, rocks, elevation, smoke.
+* **Alert States:** *Unaware* → *Suspicious* (investigate) → *Alerted* (signal horn) → *Pursuit* (call reinforcements).
+* **Distractions:** Thrown stones, whistled signals, cut tethers, fire outbreaks.
+* **Bodies & Evidence:** Discovery raises local alert; bury/drag (2 AP) to mitigate.
+
+### 6.3 Combat
+
+* **Lethality:** Deadly but avoidable; small health pools; armor/cover rare.
+* **Weapons:** Sling (quiet ranged), Spear (melee), Bow (loud ranged), Torch (light + fire), Knife (silent finisher).
+* **Environmental Kills:** Shove foes into **bitumen pits** (immobilize, fire hazard), collapse tent poles, ignite carts.
+
+### 6.4 Morale & Resolve
+
+* **Resolve (per unit):** Buffs accuracy and resist fear; drops on wounds or seeing allies fall; rally near Commander.
+* **Enemy Morale:** Captains bolster squads; killing/capturing captains can rout groups.
+
+### 6.5 Dynamic Faith System (Signature)
+
+* **Faith Meter (team-wide):** Earned by mercy (spare, free captives), courageous restraint, and successful stealth; **spent** to invoke **Miracles** or **Morale Boons**.
+* **Arrogance/HUBRIS Track:** Rises from wanton killing, looting, needless risk, overusing miracles. On crossing thresholds, perform **Hubris Checks** → penalty cards (e.g., *Desert Doldrums*: movement -1 for a turn, *False Omen*: random torch relights, *Premature Dawn*: clock advances).
+* **Miracle Bands:** Availability scales with current Faith band: *Reverent*, *Steady*, *Tested*, *Precarious*, *Arrogant* (some miracles disabled/backfire here).
+
+**Example Miracles (subject to tuning):**
+
+* *Quiet Footsteps* (Cost 2): Squad’s noise is halved for 2 turns.
+* *Desert Wind* (Cost 3): Extinguish torches in a radius; create drifting smoke for 1 turn.
+* *Guiding Star* (Cost 3): Reveal Lot’s sector + nearest horn tower.
+* *Momentary Dread* (Cost 4): Nearby enemies test morale; on fail, they flee 2 tiles.
+* *Living Water* (Cost 4): Heal and cleanse 1 debuff.
+* *Covenant’s Veil* (Cost 5): One ally becomes invisible until they act.
+
+### 6.6 Moral Decisions
+
+* **Spare vs. Slay:** Sparing noncombatants boosts Faith, may convert later; slaying is safer now, risk later (Hubris).
+* **Freeing Captives:** Adds allies or burdens; slows extraction; increases risk but boosts Faith.
+* **Looting:** Grants supplies/boons but raises Arrogance.
+
+### 6.7 Resources & Timers
+
+* **Faith** (0–10), **Resolve** (0–5 per unit), **Supplies** (rope, oil, stones), **Noise**, **Time-to-Dawn** (global countdown). Loud fights or lit fires may accelerate dawn.
+
+### 6.8 Procedural Generation
+
+* **Seeded per run**, deterministic preview allowed (optional).
+* **Valley Graph:** Generate 5–9 **camp nodes** connected by patrol paths; select 1–2 **horn towers**; place **Lot’s prison** near the far side; sprinkle hazards (bitumen pits/wadis).
+* **Tile Layers:** Dunes (slow), Rock (blocker/cover), Path (fast/noisy), Bitumen (slow/flammable), Watercourse (LOS blocker haze at night), Tents, Wagons, Pens.
+* **Danger Budget:** Scales enemy count, captains, dogs, chariots; redistributed per map sector.
+* **Objective Placement Rules:** Never fully locked behind horn towers; always multiple approach vectors; extraction zones 2–3 sectors from target.
+
+### 6.9 Meta-Progression (Roguelite)
+
+* **Oaths (Permanent):** Minor starting boons (e.g., +1 starting Faith, +1 rope) unlocked by milestones.
+* **Blessings (Draft Per Run):** Choose 2 of 4 (e.g., *Sand Reader*: better scouting; *Torch Wisdom*: torches reveal farther).
+* **Roster Traits:** The 318 servants are abstracted into a pool of generated units with class tags; survivors gain traits.
+* **Codex:** Historical notes and lore unlocks (cosmetic, narrative value only).
+
+---
+
+## 7) Content: Units, Enemies, Interactables
+
+### 7.1 Player Classes
+
+* **Scout:** High vision, low HP. *Mark*, *Stone Toss*, *Hide*.
+* **Slinger:** Quiet ranged; *Crippling Shot*.
+* **Spearman:** Melee control; *Pole Trip* to shove into pits.
+* **Saboteur:** *Cut Tether*, *Oil Splash*, *Set Fire*.
+* **Torchbearer:** Light control; *Extinguish/Relight*; can *Brandish* to fear beasts.
+* **Faithkeeper:** Once-per-mission *Prayer* (mini-miracle), Rally aura.
+
+### 7.2 Enemies
+
+* **Sentry:** Stationary, long vision, slow response.
+* **Patrolman:** Medium vision, routes between camps.
+* **Captain:** Morale anchor; calls reinforcements.
+* **Horn Guard:** Near towers; will sprint to horn if suspicious.
+* **Slinger/Bowman:** Ranged threat; noisy.
+* **War Dog Handler:** Short vision, strong smell (reduces stealth in close tiles).
+* **Chariot Team (elite event):** Fast pursuit on paths if alarmed.
+
+### 7.3 Interactables & Hazards
+
+* **Horn Tower:** Raises global alert; sabotage (2 AP + oil) disables.
+* **Bitumen Pit:** Difficult terrain; if ignited, creates spreading fire.
+* **Torch/Fire Bowl:** Light source; can be doused or carried.
+* **Tent Poles:** Collapse to create noise + soft cover.
+* **Prison Wagon/Cage:** Free captives (2 AP, optional stealth fail on break).
+* **Idol/Altar:** Lootable boons with arrogance risk.
+
+---
+
+## 8) Map, UI & Visual Direction
+
+* **Visual Style:** Minimalist isometric; glowing desert palette (cool moonlight, warm torch cores), crisp silhouettes; soft dithering shadows.
+* **Camera:** Fixed isometric with edge pan, zoom.
+* **HUD:**
+
+  * Top-left: **Faith Meter** (bands + hubris pips).
+  * Top-right: **Dawn Clock** (crescent fills), **Alert Bar**.
+  * Bottom: **Action Bar**, context tooltips, tile readout (light, noise, cover).
+  * Overlay keys: **Vision Cones**, **Sound Rings**, **Path Preview**.
+* **Accessibility:** Text scale, dyslexia-friendly font option, colorblind-safe icons for light/alert, input remap, turn length speed.
+
+---
+
+## 9) Narrative & Tone
+
+* **Theme:** Courage, mercy, and faith amid peril. Emphasize restraint and rescue, not conquest.
+* **Structure:** Short mission vignettes (procedural), camp interludes for choices, soft lore surfaced via Codex and item descriptions.
+* **Sensitivity:** Respectful depiction; avoid caricature; nonessential violence minimized; clear distinction between combatants and captives.
+
+---
+
+## 10) Technical Design (Godot 4)
+
+### 10.1 Project Setup
+
+* **Engine:** Godot 4.x (GDScript).
+* **Rendering:** 2D isometric using **TileMap** (isometric mode) + **YSort** for units; **CanvasModulate** for night; **Light2D** for torches.
+* **Pathfinding:** **AStarGrid2D** per floor; dynamic costs for light/noise.
+* **Data:** Resource-driven (`.tres`/`.res`): Units, Miracles, Items, MapRuleSets.
+
+### 10.2 Scene Tree (proposed)
+
+```
+GameRoot.tscn
+ ├─ World (Node2D)
+ │   ├─ TileMap_Ground (isometric)
+ │   ├─ TileMap_Props
+ │   ├─ TileMap_LightOccluders
+ │   ├─ Entities (YSort)
+ │   └─ Effects (Node2D)
+ ├─ UI
+ │   ├─ HUD_Faith
+ │   ├─ HUD_DawnClock
+ │   ├─ HUD_ActionBar
+ │   └─ Overlay_Toggles
+ ├─ Systems
+ │   ├─ TurnManager
+ │   ├─ AIManager
+ │   ├─ FogOfWar
+ │   └─ ProcGen
+ └─ Audio
+```
+
+### 10.3 Key Systems (GDScript sketches)
+
+**Turn Manager**
+
+```gdscript
+class_name TurnManager
+extends Node
+
+signal turn_started(team)
+
+@export var player_units: Array[Node] = []
+@export var enemy_units: Array[Node] = []
+var team := "player"
+
+func _ready():
+    start_turn("player")
+
+func start_turn(t: String):
+    team = t
+    for u in (t == "player" ? player_units : enemy_units):
+        u.refresh_ap()
+    emit_signal("turn_started", team)
+
+func end_turn():
+    if team == "player":
+        start_turn("enemy")
+    else:
+        get_node("../Systems/EnvController").resolve_environment()
+        get_node("../UI/HUD_DawnClock").tick()
+        start_turn("player")
+```
+
+**Procedural Camps (outline)**
+
+```gdscript
+class_name ProcGen
+extends Node
+
+@export var width := 80
+@export var height := 80
+@export var camp_count := 7
+var rng := RandomNumberGenerator.new()
+
+func generate(seed: int):
+    rng.seed = seed
+    var nodes = _poisson_nodes(camp_count)
+    var graph = _connect_nodes(nodes)
+    _paint_tiles(nodes, graph)
+    _place_objectives(nodes)
+```
+
+**Line of Sight (tile LOS)**
+
+```gdscript
+func has_los(from: Vector2i, to: Vector2i) -> bool:
+    for p in bresenham(from, to):
+        if TileMap_LightOccluders.get_cell_source_id(0, p) != -1:
+            return false
+    return true
+```
+
+**Faith & Miracles (data-driven)**
+
+```gdscript
+class_name Miracle
+extends Resource
+@export var id: String
+@export var cost: int = 3
+@export var effect: String # id for EffectSystem
+@export var band_min: int = 0 # 0 Reverent ... 4 Arrogant
+```
+
+### 10.4 AI
+
+* **States:** Idle, Patrol, Investigate (to last-heard noise), Alert (seek horn/call allies), Pursuit.
+* **Decision Making:** Utility scores (distance to noise, LOS, morale), simple behavior trees.
+* **Communication:** Alert packets traverse the **valley graph**; captains boost packet range.
+
+### 10.5 Fog of War & Light
+
+* **FOV:** Shadowcasting per unit; aggregate for squad.
+* **Light:** Tile lightmap baked at runtime; extinguish/ignite updates.
+
+### 10.6 Performance Targets
+
+* 1080p/60 on mid-tier laptop; drawcalls under ~1.5k; avoid overdraw via sprite batching; pooled effects.
+
+### 10.7 Save/Meta Systems
+
+* **Run Save:** Seed, map state, unit states, faith/arrogance, inventory.
+* **Meta:** Oaths, unlocked miracles, codex progress.
+* **Daily Seed** (optional) for community runs.
+
+---
+
+## 11) Progression, Difficulty, & Tuning
+
+* **Acts:** 3 rising-danger sectors per run; each adds one systemic twist (e.g., “More dogs”, “More horn towers”, “Windy night”).
+* **Scoring:** Favor (Faith earned) + Stealth Bonus + Captives Freed − Alarm Time − Casualties.
+* **Assist Options:** Extra turns before dawn; slower alert growth; tutorial miracles.
+
+---
+
+## 12) UX Flows
+
+* **Pre-Run:** Select blessings, squad, difficulty seed.
+* **In-Run:** Contextual tutorial cards (first-time only); hotkeys; right-click cancel.
+* **Post-Run:** Summary, unlocks, oaths menu.
+
+**Controls (PC):** LMB confirm, RMB cancel, Q/E rotate preview (if needed), Tab next unit, 1–6 abilities, Space end turn, Shift show cones.
+
+---
+
+## 13) Audio Direction
+
+* **Music:** Sparse, low percussion with airy flutes; intensity tied to alert level.
+* **SFX:** Sand scuffs, oil splashes, crackle of torches, horn blasts, distant dogs, whispered commands.
+
+---
+
+## 14) Production Plan (example)
+
+* **Milestone 1 (4–6 wks):** Greybox maps, turn core, LOS/noise, basic AI, dawn clock.
+* **Milestone 2 (6–8 wks):** Stealth polish (light), miracles framework, 2–3 enemy types, hazards.
+* **Milestone 3 (6–8 wks):** Meta loop (oaths/blessings), unlocks, run summary, accessibility.
+* **Milestone 4 (6–8 wks):** Content pass, art polish, SFX/Music, UX cleanup, Steam playtest.
+
+---
+
+## 15) Risks & Mitigations
+
+* **Scale of “318” vs. squad size:** Abstract to strike teams; represent the rest narratively.
+* **Religious sensitivity:** Emphasize mercy, rescue, and restraint; codex for context; avoid caricature.
+* **Stealth readability:** Strong contrast, overlays, tooltips; rigorous tutorialization.
+* **Procedural dead-ends:** Validation pass ensures multiple approach paths.
+
+---
+
+## 16) Monetization & Release
+
+* **Model:** Premium, no microtransactions.
+* **Price Target:** $15–$25 (PC).
+* **Updates:** Post-launch daily seed + new miracle pack.
+
+---
+
+## 17) Glossary
+
+* **Faith:** Spendable spiritual resource; governs miracles and morale.
+* **Arrogance/Hubris:** Hidden counter that triggers penalties when overused.
+* **Resolve:** Unit-level morale/steadiness.
+* **Dawn Clock:** Global timer; when it empties, detection skyrockets.
+
+---
+
+## 18) Next Steps
+
+1. Lock vertical slice scope: 1 biome, 3 enemy types, 6 miracles, 1 rescue objective.
+2. Implement greybox generator + dawn clock + LOS/noise + 1 miracle.
+3. Playtest for stealth clarity and moral decision feedback.
