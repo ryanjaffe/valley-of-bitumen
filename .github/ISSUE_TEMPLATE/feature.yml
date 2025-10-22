@@ -1,0 +1,26 @@
+name: Feature request
+description: Propose a feature or improvement
+labels: ["feature"]
+body:
+  - type: input
+    id: objective
+    attributes:
+      label: What’s the goal?
+      placeholder: Short, outcome-focused statement.
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details / proposal
+      placeholder: What should change? Include mockups or references.
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why?
+      placeholder: Player value, design alignment, alternatives considered.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: Bullet list of testable outcomes.
